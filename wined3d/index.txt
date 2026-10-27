@@ -1,1 +1,2 @@
-wined3d-10.10.tzst
+wined3d-10.0.tzst
+wined3d-7.8.tzst
