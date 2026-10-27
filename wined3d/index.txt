@@ -1,3 +1,4 @@
 WineD3D-11.6.tzst
 wined3d-10.0.tzst
 wined3d-7.8.tzst
+wined3d-4.21.tzst
