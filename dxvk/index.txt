@@ -1,5 +1,9 @@
 dxvk-2.7.1-binsem-gpl.tzst
+dxvk-2.7.1-sp.tzst
 dxvk-2.6.1.tzst
 dxvk-2.4.1.tzst
+dxvk-2.4.1.1-gplasync-sp.tzst
 dxvk-1.12.0-sarek.tzst
+dxvk-v1.11.0-sarek-mali-fix.tzst
 dxvk-1.10.3-async.tzst
+d9vk-0.40.1.tzst
