@@ -1,4 +1,8 @@
-vkd3d-3.0b.tzst
-vkd3d-2.14.1.tzst
-VKD3D-RE-FIX.tzst
 vkd3d-2.12.tzst
+vkd3d-2.14.1.tzst
+vkd3d-3.0b.tzst
+vkd3d-proton-2.14.1.tzst
+vkd3d-proton-3.0.1.tzst
+vkd3d-proton-arm64ec-2.14.1.tzst
+vkd3d-proton-arm64ec-3.0.1.tzst
+VKD3D-RE-FIX.tzst
