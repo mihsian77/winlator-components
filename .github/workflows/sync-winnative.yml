@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 env:
-  TOKEN: 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
+  TOKEN: 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
 
 jobs:
   sync:
@@ -33,7 +33,7 @@ jobs:
 
       - name: Run sync
         env:
-          GH_TOKEN: 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
+          GH_TOKEN: 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
         run: |
           python3 sync_components.py winnative
 
