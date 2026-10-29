@@ -209,11 +209,22 @@ def sync_winnative():
             # WinNative 是 XZ 格式
             convert_xz_wcp_to_tzst(wcp_path, tzst_path)
             
-            # 上传到我们的 release
+            # 上传到我们的 release（直接用 curl + GitHub API）
+            # 先获取 release ID
+            release_id = json.loads(subprocess.run([
+                "curl", "-s", "-H", f"Authorization: token {TOKEN}",
+                f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{target}"
+            ], capture_output=True, text=True).stdout)['id']
+            
+            # 上传 asset
+            upload_url = f"https://uploads.github.com/repos/{OUR_REPO}/releases/{release_id}/assets?name={tzst_name}"
             subprocess.run([
-                "gh", "release", "upload", target,
-                tzst_path, "--repo", OUR_REPO, "--clobber"
-            ], env={**os.environ, "GH_TOKEN": TOKEN}, check=True)
+                "curl", "-s", "-X", "POST",
+                "-H", f"Authorization: token {TOKEN}",
+                "-H", "Content-Type: application/octet-stream",
+                "--data-binary", f"@{tzst_path}",
+                upload_url
+            ], check=True)
             
             downloaded += 1
             uploaded += 1
