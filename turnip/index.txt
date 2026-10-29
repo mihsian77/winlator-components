@@ -7,9 +7,12 @@ turnip-24.1.0.tzst
 turnip-24.2.0.tzst
 turnip-25.3.0.tzst
 turnip-26.0.3.tzst
+turnip-26.1.0-a8xx.tzst
+turnip-26.1.0-perf.tzst
 turnip-26.1.0.15.tzst
 turnip-26.1.0.4.tzst
 turnip-26.1.0.9.tzst
+turnip-26.1.0.tzst
 turnip-26.2.0.tzst
 turnip-26.2.1.tzst
 turnip-26.2.6-a8xx.tzst
