@@ -172,8 +172,8 @@ def sync_winnative():
     
     try:
         releases = api_get(f"https://api.github.com/repos/{WINNATIVE_REPO}/releases?per_page=100")
-    except:
-        print("  Error fetching releases")
+    except Exception as e:
+        print(f"  Error fetching releases: {e}")
         return 0
     
     for release in releases:
