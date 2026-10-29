@@ -13,7 +13,7 @@ import urllib.request
 import subprocess
 import sys
 
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+TOKEN = os.environ.get("TOKEN", "")
 OUR_REPO = "mihsian77/winlator-components"
 
 def api_get(url):
