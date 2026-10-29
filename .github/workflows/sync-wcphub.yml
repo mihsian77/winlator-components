@@ -1,0 +1,43 @@
+name: 同步 WCPHub 稳定版
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # 每周一凌晨 2 点
+  workflow_dispatch:
+
+env:
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install zstandard
+
+      - name: Install gh CLI
+        run: |
+          sudo apt update && sudo apt install gh -y
+
+      - name: Run sync
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 sync_components.py wcphub
+
+      - name: Commit and push
+        run: |
+          git config user.name "mihsian77"
+          git config user.email "moon279@users.noreply.github.com"
+          git add dxvk/index.txt vkd3d/index.txt
+          git diff --staged --quiet || git commit -m "chore: sync WCPHub stable components"
+          git push
