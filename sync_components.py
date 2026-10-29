@@ -18,14 +18,16 @@ OUR_REPO = "mihsian77/winlator-components"
 
 def api_get(url):
     req = urllib.request.Request(url)
-    req.add_header("Authorization", f"token {TOKEN}")
+    if TOKEN:
+        req.add_header("Authorization", f"token {TOKEN}")
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
     with urllib.request.urlopen(req) as resp:
         return json.loads(resp.read())
 
 def download_file(url, dest):
     req = urllib.request.Request(url)
-    req.add_header("Authorization", f"token {TOKEN}")
+    if TOKEN:
+        req.add_header("Authorization", f"token {TOKEN}")
     with urllib.request.urlopen(req) as resp:
         with open(dest, 'wb') as f:
             f.write(resp.read())
