@@ -12,6 +12,9 @@ turnip-26.1.0.4.tzst
 turnip-26.1.0.9.tzst
 turnip-26.2.0.tzst
 turnip-26.2.1.tzst
+turnip-26.2.6-a8xx.tzst
+turnip-26.2.6-perf.tzst
+turnip-26.2.6.tzst
 turnip-27.0.0-a8xx.tzst
 turnip-27.0.0-perf.tzst
 turnip-27.0.0.tzst
