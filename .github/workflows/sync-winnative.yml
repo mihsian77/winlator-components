@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 env:
-  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TOKEN: ${{ secrets.COMPONENTS_PAT }}
 
 jobs:
   sync:
@@ -33,7 +33,7 @@ jobs:
 
       - name: Run sync
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.COMPONENTS_PAT }}
         run: |
           python3 sync_components.py winnative
 
