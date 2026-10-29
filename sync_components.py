@@ -171,7 +171,7 @@ def sync_winnative():
     uploaded = 0
     
     try:
-        releases = api_get(f"https://api.github.com/repos/{WINNATIVE_REPO}/releases?per_page=30")
+        releases = api_get(f"https://api.github.com/repos/{WINNATIVE_REPO}/releases?per_page=100")
     except:
         print("  Error fetching releases")
         return 0
