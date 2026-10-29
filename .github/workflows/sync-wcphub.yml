@@ -5,6 +5,9 @@ on:
     - cron: '0 2 * * 1'  # 每周一凌晨 2 点
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 env:
   TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
