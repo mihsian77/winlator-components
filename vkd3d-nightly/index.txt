@@ -1,0 +1,8 @@
+Vkd3d-3.0.1-0bb64c56.tzst
+Vkd3d-3.0.1-22307558.tzst
+Vkd3d-3.0.1-49a1e2c7.tzst
+Vkd3d-3.0.1-b206eb66.tzst
+Vkd3d-3.0.1-dff84379.tzst
+Vkd3d-3.0.1-ef9a02e8.tzst
+Vkd3d-3.0.1-fdbaf51f.tzst
+Vkd3d-3.1-4522cc1a.tzst
