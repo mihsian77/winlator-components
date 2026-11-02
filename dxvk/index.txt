@@ -1,3 +1,4 @@
+d9vk-0.40.1.tzst
 dxvk-0.40.1.tzst
 dxvk-0.7.tzst
 dxvk-0.96.tzst
@@ -12,8 +13,8 @@ dxvk-1.7.3.tzst
 dxvk-1.9.4.tzst
 dxvk-2.2.tzst
 dxvk-2.3.1.tzst
-dxvk-2.4.1.1-gplasync-sp.tzst
 dxvk-2.4.1-pre-reg.tzst
+dxvk-2.4.1.1-gplasync-sp.tzst
 dxvk-2.4.1.tzst
 dxvk-2.5.2.tzst
 dxvk-2.5.3.tzst
