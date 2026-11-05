@@ -8,3 +8,4 @@ Vkd3d-3.0.1-fdbaf51f.tzst
 Vkd3d-3.1-15dd1ee7.tzst
 Vkd3d-3.1-4522cc1a.tzst
 Vkd3d-3.1-8293130e.tzst
+Vkd3d-3.1-f05a7710.tzst
