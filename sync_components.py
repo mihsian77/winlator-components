@@ -12,27 +12,49 @@ import lzma
 import urllib.request
 import subprocess
 import sys
+import time
 
 TOKEN = os.environ.get("TOKEN", "")
 OUR_REPO = "mihsian77/winlator-components"
 # 每夜版只保留最近几个，避免天天堆一个新包
 NIGHTLY_KEEP = 3
 
-def api_get(url):
-    req = urllib.request.Request(url)
-    if TOKEN:
-        req.add_header("Authorization", f"token {TOKEN}")
-    req.add_header("X-GitHub-Api-Version", "2022-11-28")
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read())
+def api_get(url, retries=3):
+    # 上游偶发 502/504，一次超时不该把整轮同步打挂
+    last = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url)
+            if TOKEN:
+                req.add_header("Authorization", f"token {TOKEN}")
+            req.add_header("X-GitHub-Api-Version", "2022-11-28")
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read())
+        except Exception as e:
+            last = e
+            if attempt < retries - 1:
+                wait = 3 * (attempt + 1)
+                print(f"  api_get failed ({e}), retry in {wait}s")
+                time.sleep(wait)
+    raise last
 
-def download_file(url, dest):
-    req = urllib.request.Request(url)
-    if TOKEN:
-        req.add_header("Authorization", f"token {TOKEN}")
-    with urllib.request.urlopen(req) as resp:
-        with open(dest, 'wb') as f:
-            f.write(resp.read())
+def download_file(url, dest, retries=3):
+    last = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url)
+            if TOKEN:
+                req.add_header("Authorization", f"token {TOKEN}")
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                with open(dest, 'wb') as f:
+                    f.write(resp.read())
+            return
+        except Exception as e:
+            last = e
+            if attempt < retries - 1:
+                print(f"  download failed ({e}), retry in 5s")
+                time.sleep(5)
+    raise last
 
 def convert_zstd_wcp_to_tzst(wcp_path, tzst_path):
     """WCPHub 的 wcp (zstd) → tzst"""
