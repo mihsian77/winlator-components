@@ -1,4 +1,3 @@
-d9vk-0.40.1.tzst
 dxvk-0.40.1.tzst
 dxvk-0.7.tzst
 dxvk-0.96.tzst
