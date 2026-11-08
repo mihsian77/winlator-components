@@ -15,6 +15,8 @@ import sys
 
 TOKEN = os.environ.get("TOKEN", "")
 OUR_REPO = "mihsian77/winlator-components"
+# 每夜版只保留最近几个，避免天天堆一个新包
+NIGHTLY_KEEP = 3
 
 def api_get(url):
     req = urllib.request.Request(url)
@@ -289,6 +291,35 @@ def sync_hostei33():
     print(f"  Downloaded: {downloaded}, Uploaded: {uploaded}")
     return uploaded
 
+def prune_nightly():
+    """每夜版每天一个新包，旧的不删会一直堆在列表里，只保留最近几个"""
+    print("=== Pruning nightly ===")
+    deleted = 0
+    for target in ["vkd3d-nightly", "dxvk-nightly"]:
+        try:
+            data = api_get(f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{target}")
+        except Exception as e:
+            print(f"  {target}: Error - {e}")
+            continue
+
+        assets = sorted(data.get('assets', []), key=lambda a: a['created_at'], reverse=True)
+        for asset in assets[NIGHTLY_KEEP:]:
+            code = subprocess.run([
+                "curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+                "-X", "DELETE",
+                "-H", f"Authorization: token {TOKEN}",
+                f"https://api.github.com/repos/{OUR_REPO}/releases/assets/{asset['id']}"
+            ], capture_output=True, text=True).stdout
+            if code.startswith("2"):
+                print(f"  - {asset['name']}")
+                deleted += 1
+            else:
+                print(f"  ! {asset['name']} delete failed: HTTP {code}")
+
+    print(f"  Deleted: {deleted}")
+    return deleted
+
+
 def update_index():
     """更新所有 index.txt"""
     print("=== Updating index.txt ===")
@@ -304,15 +335,13 @@ def update_index():
             index_path = f"/tmp/{release}_index.txt"
             with open(index_path, 'w') as f:
                 f.write('\n'.join(files) + '\n')
-            
-            # 提交并推送
+
+            # 先落盘再 add，否则 add 进去的还是上一版内容
+            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt")
             subprocess.run([
                 "git", "add", f"{release}/index.txt"
             ], check=True)
-            
-            # 复制 index.txt
-            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt")
-            
+
             print(f"  {release}: {len(files)} files")
         except Exception as e:
             print(f"  {release}: Error - {e}")
@@ -327,6 +356,7 @@ def main():
     
     if mode in ["all", "winnative"]:
         total += sync_winnative()
+        total += prune_nightly()
     
     if mode in ["all", "hostei33"]:
         total += sync_hostei33()
