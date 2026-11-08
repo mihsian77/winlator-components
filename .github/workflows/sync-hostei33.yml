@@ -40,7 +40,7 @@ jobs:
       - name: Commit and push
         run: |
           git config user.name "mihsian77"
-          git config user.email "moon279@users.noreply.github.com"
+          git config user.email "209595350+mihsian77@users.noreply.github.com"
           git add dxvk/index.txt vkd3d/index.txt box64/index.txt
           git diff --staged --quiet || git commit -m "chore: sync hostei33 components"
           git push
