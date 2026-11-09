@@ -7,3 +7,4 @@ vkd3d-proton-3.0.1.tzst
 vkd3d-proton-3.1.tzst
 vkd3d-proton-arm64ec-2.14.1.tzst
 vkd3d-proton-arm64ec-3.0.1.tzst
+vkd3d-proton-arm64ec-3.1.tzst
