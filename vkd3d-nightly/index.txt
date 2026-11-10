@@ -1,3 +1,3 @@
-Vkd3d-3.0.1-49a1e2c7.tzst
-Vkd3d-3.0.1-dff84379.tzst
-Vkd3d-3.1-4522cc1a.tzst
+Vkd3d-3.1-15dd1ee7.tzst
+Vkd3d-3.1-8293130e.tzst
+Vkd3d-3.1-f05a7710.tzst
