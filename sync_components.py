@@ -188,9 +188,10 @@ def sync_winnative():
     WINNATIVE_REPO = "nicholasx417/WinNative-Components"
     
     # 上游用 <名字>-nightly-<commit> 命名。按最长前缀匹配，避免 dxvk-nightly
-    # 把 dxvk-sarek-nightly 抢走（sarek 是 dxvk 的一个分支，两个都在更新）
+    # 把 dxvk-sarek-arm64ec-nightly 抢走。sarek 的非 arm64ec 版 8 月停更了，
+    # 现在还在出的是 arm64ec 变体（右值仍落到 dxvk-sarek-nightly 分类）。
     sync_map = {
-        "dxvk-sarek-nightly": "dxvk-sarek-nightly",
+        "dxvk-sarek-arm64ec-nightly": "dxvk-sarek-nightly",
         "vkd3d-nightly": "vkd3d-nightly",
         "dxvk-nightly": "dxvk-nightly",
         "d7vk-nightly": "d7vk-nightly",
