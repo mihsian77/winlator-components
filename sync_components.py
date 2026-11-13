@@ -383,10 +383,24 @@ def update_index():
                     if n in digest_of:
                         f.write(f"{digest_of[n]}  {n}\n")
 
+            # 元数据：安装器用它显示"什么时候出的、多大"，不用为了这两个数去下载整包
+            meta = {}
+            for a in assets:
+                if a['name'] not in files:
+                    continue
+                meta[a['name']] = {
+                    "size": a.get('size', 0),
+                    "created": a.get('created_at', ''),
+                    "sha256": digest_of.get(a['name'], ''),
+                }
+            meta_path = f"/tmp/{release}_meta.json"
+            with open(meta_path, 'w') as f:
+                json.dump(meta, f, ensure_ascii=False, separators=(',', ':'))
+
             # 先落盘再 add，否则 add 进去的还是上一版内容
-            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt && cp {sha_path} {release}/sha256.txt")
+            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt && cp {sha_path} {release}/sha256.txt && cp {meta_path} {release}/meta.json")
             subprocess.run([
-                "git", "add", f"{release}/index.txt", f"{release}/sha256.txt"
+                "git", "add", f"{release}/index.txt", f"{release}/sha256.txt", f"{release}/meta.json"
             ], check=True)
 
             print(f"  {release}: {len(files)} files")
