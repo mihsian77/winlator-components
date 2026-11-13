@@ -207,7 +207,9 @@ def sync_winnative():
         print(f"  Error fetching releases: {e}")
         return 0
 
-    for release in releases:
+    # API 默认按时间倒序返回（最新在前）。这里反过来遍历，让最后上传的是最新那个：
+    # prune 按 asset 的 created_at 保留最近 N 个，按倒序传的话被留下的是最旧的包。
+    for release in reversed(releases):
         tag = release['tag_name']
 
         target = None
