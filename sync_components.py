@@ -187,30 +187,34 @@ def sync_winnative():
     print("=== Syncing WinNative ===")
     WINNATIVE_REPO = "nicholasx417/WinNative-Components"
     
-    # 要同步的 release 标签前缀
+    # 上游用 <名字>-nightly-<commit> 命名。按最长前缀匹配，避免 dxvk-nightly
+    # 把 dxvk-sarek-nightly 抢走（sarek 是 dxvk 的一个分支，两个都在更新）
     sync_map = {
-        "dxvk-nightly": "dxvk-nightly",
+        "dxvk-sarek-nightly": "dxvk-sarek-nightly",
         "vkd3d-nightly": "vkd3d-nightly",
+        "dxvk-nightly": "dxvk-nightly",
+        "d7vk-nightly": "d7vk-nightly",
     }
-    
+    prefixes = sorted(sync_map, key=len, reverse=True)
+
     downloaded = 0
     uploaded = 0
-    
+
     try:
         releases = api_get(f"https://api.github.com/repos/{WINNATIVE_REPO}/releases?per_page=100")
     except Exception as e:
         print(f"  Error fetching releases: {e}")
         return 0
-    
+
     for release in releases:
         tag = release['tag_name']
-        
-        # 判断是 DXVK 还是 VKD3D
-        if tag.startswith("dxvk-nightly"):
-            target = "dxvk-nightly"
-        elif tag.startswith("vkd3d-nightly"):
-            target = "vkd3d-nightly"
-        else:
+
+        target = None
+        for prefix in prefixes:
+            if tag.startswith(prefix + "-"):
+                target = sync_map[prefix]
+                break
+        if target is None:
             continue
         
         print(f"  Checking {tag}...")
@@ -317,7 +321,7 @@ def prune_nightly():
     """每夜版每天一个新包，旧的不删会一直堆在列表里，只保留最近几个"""
     print("=== Pruning nightly ===")
     deleted = 0
-    for target in ["vkd3d-nightly", "dxvk-nightly"]:
+    for target in ["vkd3d-nightly", "dxvk-nightly", "d7vk-nightly", "dxvk-sarek-nightly"]:
         try:
             data = api_get(f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{target}")
         except Exception as e:
@@ -346,12 +350,19 @@ def update_index():
     """更新所有 index.txt"""
     print("=== Updating index.txt ===")
     
-    releases = ["dxvk", "vkd3d", "box64", "turnip", "wined3d", "dxvk-nightly", "vkd3d-nightly"]
+    releases = ["dxvk", "vkd3d", "box64", "turnip", "wined3d", "d7vk", "d8vk", "soundfont",
+                "dxvk-nightly", "vkd3d-nightly", "d7vk-nightly", "dxvk-sarek-nightly"]
     
     for release in releases:
         try:
             data = api_get(f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{release}")
-            files = sorted([a['name'] for a in data.get('assets', [])])
+            assets = data.get('assets', [])
+            digest_of = {}
+            for a in assets:
+                d = a.get('digest') or ''
+                if d.startswith('sha256:'):
+                    digest_of[a['name']] = d[7:]
+            files = sorted([a['name'] for a in assets])
 
             # 自编译产物统一带 -dev 后缀，只用于本机测试，不进公开列表。
             # build.yml 那边也会过滤一次，但每次每夜同步重写 index 会把它覆盖回来。
@@ -362,10 +373,17 @@ def update_index():
             with open(index_path, 'w') as f:
                 f.write('\n'.join(files) + '\n')
 
+            # 校验清单：<sha256>  <文件名>。安装器下载完据此比对，避免半截包被当成完整包。
+            sha_path = f"/tmp/{release}_sha256.txt"
+            with open(sha_path, 'w') as f:
+                for n in files:
+                    if n in digest_of:
+                        f.write(f"{digest_of[n]}  {n}\n")
+
             # 先落盘再 add，否则 add 进去的还是上一版内容
-            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt")
+            os.system(f"mkdir -p {release} && cp {index_path} {release}/index.txt && cp {sha_path} {release}/sha256.txt")
             subprocess.run([
-                "git", "add", f"{release}/index.txt"
+                "git", "add", f"{release}/index.txt", f"{release}/sha256.txt"
             ], check=True)
 
             print(f"  {release}: {len(files)} files")
@@ -387,8 +405,10 @@ def main():
     if mode in ["all", "hostei33"]:
         total += sync_hostei33()
     
+    # 索引每次都刷新：prune 删掉旧包时 total 是 0，如果只在有新增时才更新，
+    # 列表里会一直留着已经被删掉的条目。update_index 是幂等的，没变化不会产生提交。
+    update_index()
     if total > 0:
-        update_index()
         print(f"\n=== Total new files: {total} ===")
     else:
         print("\n=== No new files ===")
