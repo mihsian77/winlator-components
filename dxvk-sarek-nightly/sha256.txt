@@ -1,3 +1,3 @@
-63ece6b7e9b895384ce52df856ddc887105acf2be3f12c34b0a7715b9d6e97f2  Dxvk-Sarek-arm64ec-1.13.0-37f397e1.tzst
-10d773478c6b352a8c76feba5a0ad87d01e6520dc418437cdb5d1ad55f4c96aa  Dxvk-Sarek-arm64ec-1.13.0-5764a3dc.tzst
-1812f28c80b47e94a1282cfa37a5ae534c19ca0cc3c41ecbe782b4c0510596bf  Dxvk-Sarek-arm64ec-1.13.0-86093c0a.tzst
+db05082a8721ce0b33a706ab2d2dc87beaf61bcb6fe7c487eb75eebe56d877ba  Dxvk-Sarek-arm64ec-1.13.0-250ca929.tzst
+85e6a9c4cdb92ddc18d9993be60abc482f4b0a7782325f6d8302be77e39ec97e  Dxvk-Sarek-arm64ec-1.14.1-0c0e8f6f.tzst
+ad313eb9eff02e1f022d1cb74131cd07ce6f175dc1a33d29a2b9ea199799c51a  Dxvk-Sarek-arm64ec-1.14.1-52a1b172.tzst
