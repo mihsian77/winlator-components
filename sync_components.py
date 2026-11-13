@@ -352,7 +352,11 @@ def update_index():
         try:
             data = api_get(f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{release}")
             files = sorted([a['name'] for a in data.get('assets', [])])
-            
+
+            # 自编译产物统一带 -dev 后缀，只用于本机测试，不进公开列表。
+            # build.yml 那边也会过滤一次，但每次每夜同步重写 index 会把它覆盖回来。
+            files = [f for f in files if '-dev' not in f]
+
             # 写入 index.txt
             index_path = f"/tmp/{release}_index.txt"
             with open(index_path, 'w') as f:
