@@ -1,3 +1,4 @@
+Dxvk-3.0.2-gplasync-8dd0c490.tzst
 dxvk-0.40.1.tzst
 dxvk-0.7.tzst
 dxvk-0.96.tzst
