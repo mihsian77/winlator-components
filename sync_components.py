@@ -187,14 +187,14 @@ def sync_winnative():
     print("=== Syncing WinNative ===")
     WINNATIVE_REPO = "nicholasx417/WinNative-Components"
     
-    # 上游用 <名字>-nightly-<commit> 命名。按最长前缀匹配，避免 dxvk-nightly
-    # 把 dxvk-sarek-arm64ec-nightly 抢走。sarek 的非 arm64ec 版 8 月停更了，
-    # 现在还在出的是 arm64ec 变体（右值仍落到 dxvk-sarek-nightly 分类）。
+    # 上游用 <名字>-nightly-<commit> 命名，按最长前缀匹配。
+    # dxvk-nightly（普通）和 sarek 非 arm64ec 都停更在 2026-08，分类已撤：
+    # dxvk-nightly 的历史包并进了 dxvk；sarek 只剩 arm64ec 在更新，
+    # 那是 FEX + Proton-arm64ec 路线用的，我们 box64 路线用不上，不再同步。
     sync_map = {
-        "dxvk-sarek-arm64ec-nightly": "dxvk-sarek-nightly",
         "vkd3d-nightly": "vkd3d-nightly",
-        "dxvk-nightly": "dxvk-nightly",
         "d7vk-nightly": "d7vk-nightly",
+        "box64-nightly": "box64-nightly",
     }
     prefixes = sorted(sync_map, key=len, reverse=True)
 
@@ -324,7 +324,7 @@ def prune_nightly():
     """每夜版每天一个新包，旧的不删会一直堆在列表里，只保留最近几个"""
     print("=== Pruning nightly ===")
     deleted = 0
-    for target in ["vkd3d-nightly", "dxvk-nightly", "d7vk-nightly", "dxvk-sarek-nightly"]:
+    for target in ["vkd3d-nightly", "d7vk-nightly", "box64-nightly"]:
         try:
             data = api_get(f"https://api.github.com/repos/{OUR_REPO}/releases/tags/{target}")
         except Exception as e:
@@ -354,7 +354,7 @@ def update_index():
     print("=== Updating index.txt ===")
     
     releases = ["dxvk", "vkd3d", "box64", "turnip", "wined3d", "d7vk", "d8vk", "soundfont",
-                "dxvk-nightly", "vkd3d-nightly", "d7vk-nightly", "dxvk-sarek-nightly"]
+                "vkd3d-nightly", "d7vk-nightly", "box64-nightly"]
     
     for release in releases:
         try:

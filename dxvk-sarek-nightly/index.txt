@@ -1,3 +1,0 @@
-Dxvk-Sarek-arm64ec-1.13.0-250ca929.tzst
-Dxvk-Sarek-arm64ec-1.14.1-0c0e8f6f.tzst
-Dxvk-Sarek-arm64ec-1.14.1-52a1b172.tzst
